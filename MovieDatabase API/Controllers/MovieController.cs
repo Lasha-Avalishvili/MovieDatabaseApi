@@ -76,5 +76,63 @@ namespace MovieDatabase_API.Controllers
             
         }
 
+
+        [HttpPut("/update")]
+        public async Task<IActionResult> UpdateMovie(int id, [FromBody] Movie updatedMovie)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var movie = await _context.Movies.FindAsync(id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            movie.Title = updatedMovie.Title;
+            movie.Description = updatedMovie.Description;
+            movie.ReleaseDate = updatedMovie.ReleaseDate;
+            movie.Director = updatedMovie.Director;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!MovieExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        private bool MovieExists(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpDelete("/delete")]
+        public async Task<IActionResult> SoftDeleteMovie(int id)
+        {
+            var movie = await _context.Movies.FindAsync(id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+           movie.Status= Statuses.inactive;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }
