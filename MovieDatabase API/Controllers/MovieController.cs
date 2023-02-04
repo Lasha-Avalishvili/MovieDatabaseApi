@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Reflection.Metadata.Ecma335;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MovieDatabase_API.Db;
@@ -40,6 +41,40 @@ namespace MovieDatabase_API.Controllers
             return movie;
         }
 
+        [HttpGet("/movie/search")]
+        public async Task<ActionResult<Movie>> Get(string anything)
+        {
+            var movieByTitle = await _context.Movies.FirstOrDefaultAsync(m => m.Title.ToLower() == anything.ToLower());
+            if (movieByTitle != null)
+            {
+                return movieByTitle;
+            }
+
+            var movieByDescr = await _context.Movies.FirstOrDefaultAsync(m => m.Description.ToLower().Contains(anything.ToLower()));
+            if (movieByDescr != null)
+            {
+                return movieByDescr;
+            }
+            var movieByDirector = await _context.Movies.FirstOrDefaultAsync(m => m.Director.ToLower() == anything.ToLower());
+            if (movieByDirector != null)
+            {
+                return movieByDirector;
+            }
+
+            int year;
+            if (int.TryParse(anything, out year))
+            {
+                var movieByYear = await _context.Movies.FirstOrDefaultAsync(m => m.ReleaseDate.Year == year);
+                if (movieByYear != null)
+                {
+                    return movieByYear;
+                }
+            }
+           
+
+            return NotFound();
+            
+        }
 
     }
 }
