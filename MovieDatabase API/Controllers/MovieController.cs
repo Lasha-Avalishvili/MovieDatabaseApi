@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MovieDatabase_API.Db;
 using MovieDatabase_API.Models;
 using MovieDatabase_API.Models.Requests;
@@ -12,9 +13,11 @@ namespace MovieDatabase_API.Controllers
     public class MovieController : ControllerBase
     {
         private readonly IMovieRepository _movieRepository;
-        public MovieController(IMovieRepository repo)
+        private readonly AppDbContext _context;
+        public MovieController(IMovieRepository repo, AppDbContext context)
         {
             _movieRepository = repo;
+            _context = context;
         }
 
         [HttpPost("/movie/add")]
@@ -25,5 +28,18 @@ namespace MovieDatabase_API.Controllers
             await _movieRepository.SaveChangesAsync();
             return Ok();
         }
+
+        [HttpGet("/movie/get")]
+        public async Task<ActionResult<Movie>> Get(int movieId)
+        {
+            var movie = await _context.Movies.Where(m => m.Id == movieId).FirstOrDefaultAsync(); 
+            if(movie == null)
+            {
+                return NotFound();
+            }
+            return movie;
+        }
+
+
     }
 }

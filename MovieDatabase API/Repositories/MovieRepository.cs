@@ -25,12 +25,12 @@ namespace MovieDatabase_API.Repositories
             {
                 Title = request.Name,
                 ReleaseDate = request.ReleaseDate,
-                Description= request.Description,
-                Director= request.Director,
-               // Status = 
-               // CreationDate = request.
-                
+                Description = request.Description,
+                Director = request.Director                 
             };
+
+            movie.Status = Statuses.active;        // status is always active here
+            movie.CreationDate = DateTime.Today;
 
             await _db.Movies.AddAsync(movie);   // do I need await here?
 
