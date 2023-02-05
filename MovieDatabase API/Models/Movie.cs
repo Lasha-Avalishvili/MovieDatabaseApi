@@ -13,6 +13,8 @@ namespace MovieDatabase_API.Models
         public string? Director { get; set; }
         public Statuses Status { get; set; }
 
+       
+
         public DateTime CreationDate { get; set; }
 
         public void ValidateTitle()
@@ -48,14 +50,14 @@ namespace MovieDatabase_API.Models
             }
         }
 
-        public void ValidateStatus()
-        {
-            if (Status == default(Statuses))
-            {
-                throw new Exception("enumField cannot be empty");
-            }
+        //public void ValidateStatus()
+        //{
+        //    if (Status == default(Statuses))
+        //    {
+        //        throw new Exception("enumField cannot be empty");
+        //    }
 
-        }
+        //}
 
         public void ValidateCreationDate()
         {
