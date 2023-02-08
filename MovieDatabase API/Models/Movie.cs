@@ -50,14 +50,14 @@ namespace MovieDatabase_API.Models
             }
         }
 
-        //public void ValidateStatus()
-        //{
-        //    if (Status == default(Statuses))
-        //    {
-        //        throw new Exception("enumField cannot be empty");
-        //    }
+        public void ValidateStatus()
+        {
+            if (Status == default(Statuses))
+            {
+                throw new Exception("enumField cannot be empty");
+            }
 
-        //}
+        }
 
         public void ValidateCreationDate()
         {
@@ -73,6 +73,6 @@ namespace MovieDatabase_API.Models
 
     public enum Statuses
     {
-        active, inactive
+         inactive, active
     }
 }

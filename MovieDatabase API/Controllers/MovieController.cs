@@ -48,36 +48,34 @@ namespace MovieDatabase_API.Controllers
         }
 
         [HttpGet("/movie/search")]
-        public async Task<ActionResult<Movie>> Get(string anything)
+        public async Task<ActionResult<List<Movie>>> Get(string anything)
         {
-            var movieByTitle = await _context.Movies.FirstOrDefaultAsync(m => m.Title.ToLower() == anything.ToLower());
-            if (movieByTitle != null)
-            {
-                return movieByTitle;
-            }
+            var foundMovies = new List<Movie>();
 
-            var movieByDescr = await _context.Movies.FirstOrDefaultAsync(m => m.Description.ToLower().Contains(anything.ToLower()));
-            if (movieByDescr != null)
-            {
-                return movieByDescr;
-            }
-            var movieByDirector = await _context.Movies.FirstOrDefaultAsync(m => m.Director.ToLower() == anything.ToLower());
-            if (movieByDirector != null)
-            {
-                return movieByDirector;
-            }
+
+            var movieByTitle = await _context.Movies.Where(m => m.Title.ToLower()== anything.ToLower()).ToListAsync();
+            foundMovies.AddRange(movieByTitle);
+
+            var movieByDescr = await _context.Movies.Where(m => m.Description.ToLower().Contains(anything.ToLower())).ToListAsync();
+            foundMovies.AddRange(movieByDescr);
+
+            var movieByDirector = await _context.Movies.Where(m => m.Director.ToLower() == anything.ToLower()).ToListAsync();
+            foundMovies.AddRange(movieByDirector);
 
             int year;
             if (int.TryParse(anything, out year))
             {
-                var movieByYear = await _context.Movies.FirstOrDefaultAsync(m => m.ReleaseDate.Year == year);
-                if (movieByYear != null)
-                {
-                    return movieByYear;
-                }
+                var movieByYear = await _context.Movies.Where(m => m.ReleaseDate.Year == year).ToListAsync();
+                 foundMovies.AddRange(movieByYear);
             }           
 
-            return NotFound();            
+             if(foundMovies.Count >0)
+            {
+                return foundMovies;
+            } else
+            {
+                return BadRequest("nothing found");
+            }
         }
 
 
