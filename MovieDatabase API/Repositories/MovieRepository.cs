@@ -29,7 +29,7 @@ namespace MovieDatabase_API.Repositories
                 Director = request.Director                 
             };
 
-            movie.Status = Statuses.active;        // status is always active here
+            movie.Status = "Active"; // Statuses.active;        // status is always active here
             movie.CreationDate = DateTime.Today;
 
             await _db.Movies.AddAsync(movie);   // do I need await here?

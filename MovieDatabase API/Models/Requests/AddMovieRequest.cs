@@ -9,5 +9,6 @@ namespace MovieDatabase_API.Models.Requests
         public string? Description { get; set; }
         public string? Director { get; set; }
         public DateTime ReleaseDate { get; set; }
+
     }
 }

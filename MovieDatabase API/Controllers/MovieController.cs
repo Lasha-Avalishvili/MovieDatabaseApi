@@ -136,7 +136,7 @@ namespace MovieDatabase_API.Controllers
                 return NotFound();
             }
 
-           movie.Status= Statuses.inactive;
+            movie.Status = "Deleted";   // Statuses.inactive;
             await _context.SaveChangesAsync();
 
             return NoContent();
