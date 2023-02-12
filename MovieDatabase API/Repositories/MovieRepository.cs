@@ -26,13 +26,12 @@ namespace MovieDatabase_API.Repositories
                 Title = request.Name,
                 ReleaseDate = request.ReleaseDate,
                 Description = request.Description,
-                Director = request.Director                 
+                Director = request.Director,
+                Status = "Active",
+                CreationDate = DateTime.Today
             };
 
-            movie.Status = "Active"; // Statuses.active;        // status is always active here
-            movie.CreationDate = DateTime.Today;
-
-            await _db.Movies.AddAsync(movie);   // do I need await here?
+            await _db.Movies.AddAsync(movie); 
 
             return movie;
         }
@@ -41,7 +40,6 @@ namespace MovieDatabase_API.Repositories
         {
             await _db.SaveChangesAsync();
         }
-
 
     }
 }
